@@ -87,14 +87,14 @@ const Login = () => {
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-500">
               No account?
-              <Link to="/register" className="underline">
+              <Link to="/register" className="underline ml-1 text-gray-900">
                 Sign up
               </Link>
             </p>
 
             <button
               type="submit"
-              className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+              className="inline-block rounded-lg bg-yellow-500 px-5 py-3 text-sm uppercase font-bold text-white"
             >
               Sign in
             </button>
