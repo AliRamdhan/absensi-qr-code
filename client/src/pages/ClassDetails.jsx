@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import StatsCard from "../components/StatsCard";
 import StudentList from "../components/StudentList";
 import { Link } from "react-router-dom";
+import ModalQR from "../components/ModalQR";
 const ClassDetails = () => {
-  const { id } = useParams(); // Extract the "id" from the URL
+  const { id } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="px-4 py-12 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-16">
@@ -57,7 +59,10 @@ const ClassDetails = () => {
       </p>
 
       <div className="w-full flex justify-center items-center">
-        <button className="group flex items-center justify-between gap-4 rounded-lg border border-current px-5 py-3 text-yellow-600 transition-colors hover:bg-yellow-600 focus:outline-none focus:ring active:bg-yellow-500">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="group flex items-center justify-between gap-4 rounded-lg border border-current px-5 py-3 text-yellow-600 transition-colors hover:bg-yellow-600 focus:outline-none focus:ring active:bg-yellow-500"
+        >
           <span className="font-medium transition-colors group-hover:text-white">
             Generate Code QR
           </span>
@@ -80,15 +85,13 @@ const ClassDetails = () => {
           </span>
         </button>
       </div>
-
+      {isOpen && <ModalQR setIsOpen={setIsOpen} isOpen={isOpen} />}
       <div className="container py-10 mx-auto">
         <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl">
           Your Students
         </h1>
 
-        <p className="mt-4 text-gray-500">
-          List of students Class A
-        </p>
+        <p className="mt-4 text-gray-500">List of students Class A</p>
 
         <StudentList />
       </div>
