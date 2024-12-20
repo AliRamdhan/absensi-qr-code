@@ -91,13 +91,14 @@ const Login = () => {
                 Sign up
               </Link>
             </p>
-
-            <button
-              type="submit"
-              className="inline-block rounded-lg bg-yellow-500 px-5 py-3 text-sm uppercase font-bold text-white"
-            >
-              Sign in
-            </button>
+            <Link to={`/`}>
+              <button
+                type="submit"
+                className="inline-block rounded-lg bg-yellow-500 px-5 py-3 text-sm uppercase font-bold text-white"
+              >
+                Sign in
+              </button>
+            </Link>
           </div>
         </form>
       </div>
