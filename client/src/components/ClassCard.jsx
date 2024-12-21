@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 
-const ClassCard = () => {
+const ClassCard = ({ classData = {} }) => {
   return (
     <div className="p-8 space-y-3 border-2 border-yellow-700 rounded-xl">
       <span className="inline-block text-yellow-500">
@@ -28,22 +28,28 @@ const ClassCard = () => {
       </span>
 
       <h1 className="text-xl font-semibold text-gray-700 capitalize">
-        Class A
+        {classData?.namaKelas || "Class Name"}
       </h1>
       <div className="text-gray-800">
         <p>
-          <span className="font-semibold">Subject: </span>Matkul A
+          <span className="font-semibold">Subject: </span>
+          {classData?.mataKuliah || "N/A"}
         </p>
         <p>
-          <span className="font-semibold">Time: </span> 10:00 AM - 12:00 PM
+          <span className="font-semibold">Time: </span>{" "}
+          {classData?.startTime || "N/A"} AM - {classData?.endTime || "N/A"} PM
         </p>
         <p>
-          <span className="font-semibold">Location: </span> Room B, Rectorate
-          Building
+          <span className="font-semibold">Duration: </span>{" "}
+          {classData?.duration || "0"} Hours
+        </p>
+        <p>
+          <span className="font-semibold">Pertemuan: </span>{" "}
+          {classData?.pertemuan || "N/A"}
         </p>
       </div>
       <Link
-        to={`/class/2`}
+        to={`/class/${classData?.id}`}
         className="inline-flex p-2 text-yellow-900 capitalize transition-colors duration-300 transform bg-yellow-100 rounded-full rtl:-scale-x-100 hover:underline hover:text-yellow-600"
       >
         <svg

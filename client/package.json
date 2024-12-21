@@ -13,6 +13,7 @@
     "@ag-grid-community/client-side-row-model": "^32.3.3",
     "ag-grid-community": "^33.0.3",
     "ag-grid-react": "^33.0.3",
+    "axios": "^1.7.9",
     "datatables.net-dt": "^2.1.8",
     "datatables.net-react": "^1.0.0",
     "react": "^18.3.1",
