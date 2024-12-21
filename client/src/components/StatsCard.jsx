@@ -1,6 +1,6 @@
 import React from "react";
 
-const StatsCard = ({ isPresent, isAbsent }) => {
+const StatsCard = ({ isPresent, isAbsent, count,title }) => {
   return (
     <article
       className={`flex items-center gap-4 rounded-lg border border-gray-100 ${
@@ -25,11 +25,9 @@ const StatsCard = ({ isPresent, isAbsent }) => {
       </span>
 
       <div>
-        <p className="text-2xl font-medium text-white">$240.94</p>
+        <p className="text-2xl font-medium text-white">{count} Mahasiswa</p>
 
-        <p className="text-sm text-white">
-          {isPresent ? "Hadir" : isAbsent ? "Tidak Hadir" : "Belum absen"}
-        </p>
+        <p className="text-sm text-white">{title}</p>
       </div>
     </article>
   );

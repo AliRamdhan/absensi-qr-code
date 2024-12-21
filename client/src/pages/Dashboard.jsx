@@ -43,8 +43,8 @@ const Dashboard = () => {
         </p>
 
         <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
-          {classes.map((classItem, index) => (
-            <ClassCard key={index} classData={classItem} />
+          {classes.map((classItem) => (
+            <ClassCard key={classItem.id} classData={classItem} />
           ))}
         </div>
       </div>

@@ -24,7 +24,7 @@ const Login = () => {
       // Store the token and user info in local storage or context
       localStorage.setItem("authToken", token);
       localStorage.setItem("user", JSON.stringify(user));
-
+      alert("User login successfully:");
       // Navigate to the dashboard or home page
       navigate("/");
     } catch (err) {
