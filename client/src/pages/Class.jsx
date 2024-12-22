@@ -13,18 +13,17 @@ const Class = () => {
     endTime: "",
     duration: "",
   });
-  const [user, setUser] = useState(null); // Add state for user data
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch authenticated user info
     const authToken = localStorage.getItem("authToken");
     const userData = JSON.parse(localStorage.getItem("user"));
 
     if (!authToken || !userData?.username) {
-      navigate("/login"); // Redirect if not logged in
+      navigate("/login");
     } else {
-      setUser(userData); // Set user data
+      setUser(userData);
       setFormData((prevData) => ({
         ...prevData,
         namaDosen: userData.username,
@@ -39,18 +38,17 @@ const Class = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return; // Ensure user is defined before proceeding
+    if (!user) return;
 
     try {
       const response = await axios.post(`${BASE_URL}/class`, { ...formData });
       alert("Class created successfully");
       if (response) {
-        // Ensure user is available before making this request
         const addedToUser = await axios.post(
           `${BASE_URL}/user/${user.id}/classes/${response.data.id}`
         );
       }
-      navigate("/"); // Redirect to home after success
+      navigate("/");
     } catch (error) {
       console.error("Failed to create class", error);
       alert("Failed to create class");

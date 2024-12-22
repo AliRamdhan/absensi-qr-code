@@ -67,7 +67,6 @@ const ClassDetails = () => {
       setQrUrl(qrData);
       setIsOpen(true);
     } catch (error) {
-      setLocationError("Failed to get location. Please try again later.");
       console.error("Location error:", error);
     }
   };
