@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router";
 const Header = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <header className="bg-white border-b-2">
       <div className="w-full py-8 sm:py-12">
         <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              Halo Admin
+              Halo {user?.username || "Admin"}
             </h1>
 
             <p className="mt-1.5 text-sm text-gray-500">
