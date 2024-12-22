@@ -12,7 +12,7 @@ const Absence = sequelize.define(
     },
     status: {
       type: DataTypes.ENUM,
-      values: ["present", "pending"],
+      values: ["present", "absent"],
       defaultValue: "present",
       allowNull: false,
     },

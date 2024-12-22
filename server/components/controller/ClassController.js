@@ -1,6 +1,6 @@
-// controllers/classController.js
 const classService = require("../service/ClassService");
 
+// Create Class
 const createClass = async (req, res) => {
   try {
     const newClass = await classService.createClass(req.body);
@@ -10,6 +10,7 @@ const createClass = async (req, res) => {
   }
 };
 
+// Get All Clases
 const getAllClasses = async (req, res) => {
   try {
     const classes = await classService.getAllClasses();
@@ -19,6 +20,7 @@ const getAllClasses = async (req, res) => {
   }
 };
 
+// Get Class by Id
 const getClassById = async (req, res) => {
   try {
     const classInstance = await classService.getClassById(req.params.id);
@@ -31,6 +33,7 @@ const getClassById = async (req, res) => {
   }
 };
 
+// Update Class 
 const updateClass = async (req, res) => {
   try {
     const updatedClass = await classService.updateClass(req.params.id, req.body);
@@ -40,6 +43,7 @@ const updateClass = async (req, res) => {
   }
 };
 
+// Delete Class
 const deleteClass = async (req, res) => {
   try {
     await classService.deleteClass(req.params.id);

@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/config.db");
-const Class = require("./Classes"); // Import Class model after it's defined
+const Class = require("./Classes");
 
 const User = sequelize.define(
   "users",
@@ -32,13 +32,11 @@ const User = sequelize.define(
     },
   },
   {
-    timestamps: true, // Adds `createdAt` and `updatedAt`
+    timestamps: true,
   }
 );
 
-// Define the many-to-many relationship after both models are defined
 User.belongsToMany(Class, { through: "userClasses", foreignKey: "userId" });
 Class.belongsToMany(User, { through: "userClasses", foreignKey: "classId" });
 
-// Export the User model
 module.exports = User;
