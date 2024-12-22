@@ -5,6 +5,7 @@ import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
 import Class from "./pages/Class";
 import ClassDetails from "./pages/ClassDetails";
+import Attendance from "./pages/Attandance";
 
 function PrivateRoute({ element, ...rest }) {
   const isAuthenticated = !!localStorage.getItem("authToken"); // Check authentication status
@@ -29,6 +30,11 @@ function App() {
           path="/class/:id"
           element={<PrivateRoute element={<ClassDetails />} />}
         />
+        <Route
+          path="/attendance/form"
+          element={<PrivateRoute element={<Attendance />} />}
+        />
+        
       </Routes>
     </BrowserRouter>
   );

@@ -4,16 +4,18 @@ import StatsCard from "../components/StatsCard";
 import StudentList from "../components/StudentList";
 import ModalQR from "../components/ModalQR";
 import axios from "axios";
-import { BASE_URL } from "../common/constants";
+import { ATTANDANCE_URL, BASE_URL } from "../common/constants";
+import { getLocationFromIpApi } from "../lib/location";
 
 const ClassDetails = () => {
-  const { id } = useParams();
+  const { id: classId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [classes, setClasses] = useState(null);
   const [users, setUsers] = useState([]);
   const [absences, setAbsences] = useState([]);
   const [presentCount, setPresentCount] = useState(0);
   const [absentCount, setAbsentCount] = useState(0);
+  const [qrUrl, setQrUrl] = useState("");
 
   useEffect(() => {
     const fetchData = async (id) => {
@@ -37,9 +39,9 @@ const ClassDetails = () => {
       }
     };
 
-    fetchData(id);
-    fetchAbsences(id);
-  }, [id]);
+    fetchData(classId);
+    fetchAbsences(classId);
+  }, [classId]);
 
   useEffect(() => {
     // Calculate present and absent counts
@@ -57,6 +59,18 @@ const ClassDetails = () => {
       calculateAttendance();
     }
   }, [users, absences]);
+
+  const generateQrCode = async () => {
+    try {
+      const location = await getLocationFromIpApi();
+      const qrData = `${ATTANDANCE_URL}/attendance/form?lon=${location.longitude}&lat=${location.latitude}&classId=${classId}`;
+      setQrUrl(qrData);
+      setIsOpen(true);
+    } catch (error) {
+      setLocationError("Failed to get location. Please try again later.");
+      console.error("Location error:", error);
+    }
+  };
 
   return (
     <div className="px-4 py-12 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-16">
@@ -116,7 +130,7 @@ const ClassDetails = () => {
           </p>
           <div className="w-full flex justify-center items-center">
             <button
-              onClick={() => setIsOpen(true)}
+              onClick={generateQrCode}
               className="group flex items-center justify-between gap-4 rounded-lg border border-current px-5 py-3 text-yellow-600 transition-colors hover:bg-yellow-600 focus:outline-none focus:ring active:bg-yellow-500"
             >
               <span className="font-medium transition-colors group-hover:text-white">
@@ -141,7 +155,9 @@ const ClassDetails = () => {
               </span>
             </button>
           </div>
-          {isOpen && <ModalQR setIsOpen={setIsOpen} isOpen={isOpen} />}
+          {isOpen && (
+            <ModalQR setIsOpen={setIsOpen} isOpen={isOpen} qrData={qrUrl} />
+          )}
           <div className="container py-10 mx-auto">
             <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl">
               Your Students

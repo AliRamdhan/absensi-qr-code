@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import QRPict from "/assets/qr.png";
-const ModalQR = ({ isOpen, setIsOpen }) => {
-  // Close the modal when pressing the Esc key
+import { QRCodeSVG } from "qrcode.react";
+
+const ModalQR = ({ isOpen, setIsOpen, qrData }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -16,10 +16,22 @@ const ModalQR = ({ isOpen, setIsOpen }) => {
     };
   }, [setIsOpen]);
 
-  // Close the modal when clicking outside
   const handleOutsideClick = (event) => {
     if (event.target.id === "modal-overlay") {
       setIsOpen(false);
+    }
+  };
+
+  const handleCopy = () => {
+    if (qrData) {
+      navigator.clipboard
+        .writeText(qrData)
+        .then(() => {
+          alert("QR Code URL copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy text:", err);
+        });
     }
   };
 
@@ -34,20 +46,21 @@ const ModalQR = ({ isOpen, setIsOpen }) => {
       aria-modal="true"
       onClick={handleOutsideClick}
     >
-      <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
+      <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl sm:my-8 sm:w-full sm:p-6">
         <div className="flex items-center justify-center mx-auto">
-          <img className="h-full rounded-lg" src={QRPict} alt="" />
+          {qrData ? (
+            <QRCodeSVG value={qrData} size={200} />
+          ) : (
+            <p className="text-gray-500">Generating QR Code...</p>
+          )}
         </div>
 
         <div className="mt-5 text-center">
-          <h3
-            className="text-lg font-medium text-gray-800 dark:text-white"
-            id="modal-title"
-          >
+          <h3 className="text-lg font-medium text-gray-800" id="modal-title">
             QR Code
           </h3>
 
-          <p className="mt-2 text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-gray-500">
             Scan this QR code to notify about your absence. You can also share
             this code with others.
           </p>
@@ -56,12 +69,15 @@ const ModalQR = ({ isOpen, setIsOpen }) => {
         <div className="flex items-center justify-between w-full mt-5 gap-x-2">
           <input
             type="text"
-            value="https://dwqdwqdwqofwgihuot4r43795y23rh32ibl"
+            value={qrData}
             readOnly
-            className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+            className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
           />
 
-          <button className="rounded-md hidden sm:block p-1.5 text-gray-700 bg-white border border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring transition-colors duration-300 hover:text-blue-500 dark:hover:text-blue-500">
+          <button
+            onClick={handleCopy}
+            className="rounded-md hidden sm:block p-1.5 text-gray-700 bg-white border border-gray-200 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring transition-colors duration-300 hover:text-blue-500"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-6 h-6"
@@ -82,7 +98,7 @@ const ModalQR = ({ isOpen, setIsOpen }) => {
         <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
           <button
             onClick={() => setIsOpen(false)}
-            className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
+            className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium  tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
           >
             Cancel
           </button>
