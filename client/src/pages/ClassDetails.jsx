@@ -6,6 +6,8 @@ import ModalQR from "../components/ModalQR";
 import axios from "axios";
 import { ATTANDANCE_URL, BASE_URL } from "../common/constants";
 import { getLocationFromIpApi } from "../lib/location";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ClassDetails = () => {
   const { id: classId } = useParams();
@@ -21,7 +23,6 @@ const ClassDetails = () => {
     const fetchData = async (id) => {
       try {
         const response = await axios.get(`${BASE_URL}/class/${id}`);
-        console.log(response.data);
         setClasses(response.data);
         setUsers(response.data.users);
       } catch (error) {
@@ -32,7 +33,6 @@ const ClassDetails = () => {
     const fetchAbsences = async (classId) => {
       try {
         const response = await axios.get(`${BASE_URL}/attend/class/${classId}`);
-        console.log("Fetched absences:", response.data);
         setAbsences(response.data);
       } catch (error) {
         console.error("Error fetching absences:", error.message);
@@ -44,7 +44,6 @@ const ClassDetails = () => {
   }, [classId]);
 
   useEffect(() => {
-    // Calculate present and absent counts
     const calculateAttendance = () => {
       const present = users.filter((user) =>
         absences.some((absence) => absence.userId === user.id)
@@ -69,6 +68,40 @@ const ClassDetails = () => {
     } catch (error) {
       console.error("Location error:", error);
     }
+  };
+
+  const downloadAbsenceList = () => {
+    const doc = new jsPDF();
+
+    //
+    doc.setFontSize(16);
+    doc.text("Absence List", 14, 20);
+
+    doc.setFontSize(12);
+    if (classes) {
+      doc.text(`Class Name: ${classes.namaKelas}`, 14, 30);
+      doc.text(`Subject: ${classes.mataKuliah}`, 14, 40);
+      doc.text(`Lecturer: ${classes.namaDosen}`, 14, 50);
+      doc.text(
+        `Duration: ${classes.duration} hours (${classes.startTime} - ${classes.endTime} WIB)`,
+        14,
+        60
+      );
+    }
+
+    const tableColumn = ["Name", "Email", "Status"];
+    const tableRows = users.map((user) => {
+      const isAbsent = absences.some((absence) => absence.userId === user.id);
+      return [user.username, user.email, isAbsent ? "Absent" : "Present"];
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 70,
+    });
+
+    doc.save(`Absence_List_${classes?.namaKelas || "Class"}.pdf`);
   };
 
   return (
@@ -158,11 +191,38 @@ const ClassDetails = () => {
             <ModalQR setIsOpen={setIsOpen} isOpen={isOpen} qrData={qrUrl} />
           )}
           <div className="container py-10 mx-auto">
-            <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl">
-              Your Students
-            </h1>
+            <div className="w-full grid grid-cols-1 lg:grid-cols-2 pb-4">
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl">
+                  Your Students
+                </h1>
 
-            <p className="mt-4 text-gray-500">List of students Class A</p>
+                <p className="mt-4 text-gray-500">List of students Class A</p>
+              </div>
+              <div className="w-full flex justify-end items-center">
+                <button
+                  onClick={downloadAbsenceList}
+                  type="button"
+                  className="px-4 py-3 bg-yellow-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-x-75 flex"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
+                  </svg>
+
+                  <span className="ml-2">Download</span>
+                </button>
+              </div>
+            </div>
             <StudentList users={users} absences={absences} />
           </div>
         </>
