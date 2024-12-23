@@ -24,7 +24,9 @@ const ClassDetails = () => {
       try {
         const response = await axios.get(`${BASE_URL}/class/${id}`);
         setClasses(response.data);
-        setUsers(response.data.users);
+        const users = response.data.users;
+        const students = users.filter((user) => user.role !== "dosen");
+        setUsers(students);
       } catch (error) {
         console.error("Error fetching class data:", error.message);
       }
@@ -45,7 +47,9 @@ const ClassDetails = () => {
 
   useEffect(() => {
     const calculateAttendance = () => {
-      const present = users.filter((user) =>
+      const students = users.filter((user) => user.role !== "dosen");
+
+      const present = students.filter((user) =>
         absences.some((absence) => absence.userId === user.id)
       ).length;
       const absent = users.length - present;
@@ -73,7 +77,6 @@ const ClassDetails = () => {
   const downloadAbsenceList = () => {
     const doc = new jsPDF();
 
-    //
     doc.setFontSize(16);
     doc.text("Absence List", 14, 20);
 
